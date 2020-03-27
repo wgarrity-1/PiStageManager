@@ -1,46 +1,37 @@
-# Imports
-
-# Import guizero for the gui
 from guizero import App, Text, MenuBar, info, PushButton, ListBox, Box
-# Import for the file dialog box
 from tkinter import filedialog as fd
-# Import sys so quit option in menu can work properly
 import sys
-# Imports show loading features
-import show_load
-# Imports show controling features
-import show_control
-# Imports interrupt loader
-import interrupt_load
+import webbrowser
+import show_load #from show_load.py
+import show_control #from show_control.py
+import interrupt_load #from interrupt_load.py
+
 
 # Variables
-
-# Show folder's directory
 show_directory = "Please Select a Show Directory!"
+interrupt_list = interrupt_load.load_interrupts() # List of interrupts in the interrupts folder
 
-interrupt_list = interrupt_load.load_interrupts()
 
 # Definitions
-
 # Exit Command
 def exit_menu_option():
     sys.exit()
 
-# Load Show Command, presents a diolog box to select a folder, then saves it to a variable, then it updates the text at the top of the app
+# Open Show Command
 def open_show():
     global show_directory
-    show_directory = fd.askdirectory(initialdir = "/home", title="Please select the show folder")
-    show_folder_name.clear()
-    show_folder_name.append("Show Folder: " + show_directory)
-    show_load.load(show_directory)
+    show_directory = fd.askdirectory(initialdir = "/home", title="Please select the show folder") #Presents a diolog box to select a folder and save the directory to a variable
+    show_folder_name.clear() #Clears the text at the top of the window
+    show_folder_name.append("Show Folder: " + show_directory) #Changes the text with the show directory folder
+    show_load.load(show_directory) #Calls the load function in show_load.py to initialize the show
 
 # Command for the back button
 def back_command():
-    show_control.cue_backward()
-    cue_number.clear()
-    cue_number.append("Cue: " + str(show_control.current_cue))
+    show_control.cue_backward() #Call the cue_backward function in show_control.py
+    cue_number.clear() #Clears the cue text
+    cue_number.append("Cue: " + str(show_control.current_cue)) #Changes the cue text to current cue number
 
-# Command for the forward button
+# Command for the forward button, same as the back button but calls the forward command instread
 def forward_command():
     show_control.cue_forward()
     cue_number.clear()
@@ -48,24 +39,30 @@ def forward_command():
 
 # Send Interrupt Command
 def send_interrupt():
-    selected_interrupt = interrupt_listbox.value
-    show_control.interrupt_show(selected_interrupt)
+    selected_interrupt = interrupt_listbox.value #adds the current interrupt selected in the box to the variable selected_interrupt
+    show_control.interrupt_show(selected_interrupt) #calls the interrupt_show function in show_control.py with the selected_interrupt as the parameter
 
-# Dummy Help Command
-def help_command():
-    info("Help", "This program is unfinished so no help for you!")
+# About command
+def about():
+    info("About PiStageManager", "PiStageManager 0.1 beta - Developed by will9183")
 
+# View licence command
+#def licence():
+    #webbrowser.open("../LICENSE", new=2)
+
+# Open Github Page Command
+#def github():
+    #webbrowser.open("https://github.com/will9183/PiStageManager", new=2)
 
 
 # App
 app = App(title="PiStageManager - Display Controller")
-
-# Menubar
+# Menubar with options
 menubar = MenuBar(app,
                   toplevel=["File", "Help"],
                   options=[
                       [ ["Open Show", open_show], ["Exit", exit_menu_option] ],
-                      [ ["Help", help_command], ["Debug", show_control.debug] ]
+                      [ ["About PiStageManager", about] ]
                       ])
 
 # Text widget + box to display the show directory that is currently loaded

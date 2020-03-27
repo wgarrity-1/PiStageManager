@@ -8,12 +8,12 @@ cue_max = 0
 current_cue = 0
 
 
-# Sets image onto html file (not yet though)
+# Copies the image file of the selected current_cue to current.png in the Current Slide folder, then prints out a debug message
 def set_image():
     shutil.copy(show_load.show_slides[current_cue], "Current Slide/current.png")
     print("Current slide: " + show_load.show_slides[current_cue])
 
-# Determines the length of the list, subtracts 1, and then adds it to cue_max for the max cue that the slideshow contains
+# Determines the length of the list, subtracts 1 for indexing reasons, and then adds it to cue_max for the max cue that the show contains
 def find_cue_max():
     global cue_max
     cue_max = len(show_load.show_slides) - 1
@@ -37,7 +37,7 @@ def cue_backward():
     else:
         print("You are already at the beginning of the show.")
 
-# Interrupt Selection Command
+# Interrupt Selection Command, copies the selected interrupt to current.png
 def interrupt_show(interrupt_slide):
     shutil.copy(interrupt_slide, "Current Slide/current.png")
     print("Interrupt!: " + interrupt_slide)
